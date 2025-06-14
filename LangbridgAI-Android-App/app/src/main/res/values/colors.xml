@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Palette -->
+    <color name="deep_indigo">#3436e7</color>
+    <color name="deep_indigo_darker">#2527b1</color> <!-- Bolder shade for hover/focus -->
+    <color name="soft_sky_blue">#7be1e2</color>
+    <color name="warm_pink">#ff80b5</color>
+    <color name="warm_pink_darker">#e6649a</color> <!-- Bolder shade for hover/focus -->
+
+    <!-- Backgrounds & Surfaces -->
+    <color name="background_white">#f9f8ff</color>
+    <color name="card_surface_white_transparent">#CCFFFFFF</color> <!-- 80% transparency for glassy effect -->
+
+    <!-- Borders -->
+    <color name="border_light_indigo_tint">#e0e4fd</color>
+    <color name="border_warm_pink_tint">#ffd6eb</color>
+
+    <!-- Text Colors -->
+    <color name="text_deep_indigo">#3436e7</color>
+    <color name="text_dark_contrast">#212121</color> <!-- For higher contrast on light backgrounds -->
+    <color name="text_pale_indigo">#6A6DE7</color> <!-- Pale indigo for neutral/muted text -->
+    <color name="text_gentle_gray">#616161</color> <!-- Gentle gray for neutral/muted text -->
+
+    <!-- Destructive/Warning -->
+    <color name="red_pink_destructive">#ff4c63</color>
+
+    <!-- Standard Android colors (if you use them, you might want to adjust) -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

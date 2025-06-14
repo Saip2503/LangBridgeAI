@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F2F5" <!-- Light gray background -->
+    tools:context=".LoginActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="12dp" <!-- Slightly higher elevation for soft shadow -->
+        app:cardBackgroundColor="@color/card_surface_white_transparent" <!-- Glassy effect -->
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="400dp" <!-- Max width for larger screens -->
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:background="@drawable/rounded_card_background_with_border"> <!-- Optional: for pastel border -->
+
+            <TextView
+                android:id="@+id/loginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login to LangbridgAI"
+                android:textSize="28sp" <!-- Slightly larger title -->
+                android:textStyle="bold"
+                android:textColor="@color/text_deep_indigo" <!-- Deep indigo text -->
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Email"
+                android:textColorHint="@color/text_gentle_gray"
+                android:textColor="@color/text_dark_contrast"
+                android:inputType="textEmailAddress"
+                android:padding="14dp" <!-- Slightly more padding -->
+                android:background="@drawable/rounded_edittext_background" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:hint="Password"
+                android:textColorHint="@color/text_gentle_gray"
+                android:textColor="@color/text_dark_contrast"
+                android:inputType="textPassword"
+                android:padding="14dp"
+                android:background="@drawable/rounded_edittext_background" />
+
+            <Button
+                android:id="@+id/buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                style="@style/Widget.LangbridgAI.Button.Primary" <!-- Apply the primary button style -->
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textSize="18sp"
+                />
+
+            <TextView
+                android:id="@+id/textViewDemoCredentials"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Demo : demo@demo.com / demo"
+                android:textSize="14sp"
+                android:textColor="@color/text_pale_indigo" <!-- Muted text color -->
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

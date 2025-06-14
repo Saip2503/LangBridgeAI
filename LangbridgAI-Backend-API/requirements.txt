@@ -1,0 +1,6 @@
+fastapi==0.111.0
+uvicorn==0.30.1
+google-cloud-translate==3.11.0
+google-cloud-speech==2.27.0
+google-cloud-vision==3.8.0
+python-dotenv==1.0.1  # For local development with .env

@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
+
+# Test/development specific files
+*.sqlite3
+db.sqlite3
+
+# Docker-specific files (if you have them)
+.dockerignore
+
+# Cloud Run specific (if any local configurations)
+.gcloud/

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp" <!-- Slightly more padding -->
+    android:background="@color/background_white"> <!-- Consistent background -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From"
+        android:textSize="16sp"
+        android:textColor="@color/text_deep_indigo"
+        android:layout_marginTop="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_from_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/languages_array"
+        android:minHeight="48dp"
+        android:background="@drawable/rounded_edittext_background" <!-- Re-use edittext background -->
+        android:padding="8dp"/> <!-- Padding for spinner content -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To"
+        android:textSize="16sp"
+        android:textColor="@color/text_deep_indigo"
+        android:layout_marginTop="16dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_to_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/languages_array"
+        android:minHeight="48dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:padding="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text"
+        android:textSize="16sp"
+        android:textColor="@color/text_deep_indigo"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/edit_text_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="5" <!-- More space for text -->
+        android:gravity="top|start"
+        android:hint="Enter text to translate..."
+        android:textColorHint="@color/text_gentle_gray"
+        android:textColor="@color/text_dark_contrast"
+        android:inputType="textMultiLine"
+        android:background="@drawable/rounded_edittext_background"
+        android:padding="12dp"/>
+
+    <Button
+        android:id="@+id/button_translate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Translate"
+        style="@style/Widget.LangbridgAI.Button.Primary"
+        android:layout_marginTop="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Translation"
+        android:textSize="16sp"
+        android:textColor="@color/text_deep_indigo"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/text_view_translation_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="5"
+        android:gravity="top|start"
+        android:hint="Translation will appear here"
+        android:textColorHint="@color/text_gentle_gray"
+        android:textColor="@color/text_dark_contrast"
+        android:background="@drawable/rounded_edittext_background"
+        android:padding="12dp"/>
+
+    <Button
+        android:id="@+id/button_download_translation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Download Translation"
+        style="@style/Widget.LangbridgAI.Button.Secondary"
+        android:layout_marginTop="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
+
+</LinearLayout>
