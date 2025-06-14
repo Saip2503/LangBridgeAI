@@ -10,6 +10,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope // For coroutines scope in fragments
+import com.example.langbridgai.network.RetrofitClient
+import com.example.langbridgai.network.TextTranslateRequest
+import kotlinx.coroutines.launch
 
 class TextTranslateFragment : Fragment() {
 
@@ -46,30 +50,66 @@ class TextTranslateFragment : Fragment() {
 
     private fun performTextTranslation() {
         val sourceText = inputText.text.toString().trim()
-        val fromLang = fromLanguageSpinner.selectedItem.toString()
-        val toLang = toLanguageSpinner.selectedItem.toString()
+        val fromLangCode = getLanguageCode(fromLanguageSpinner.selectedItem.toString())
+        val toLangCode = getLanguageCode(toLanguageSpinner.selectedItem.toString())
 
         if (sourceText.isEmpty()) {
             Toast.makeText(requireContext(), "Please enter text to translate", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // In a real app, you would make an API call here.
-        // Example using a placeholder:
-        val translatedText = "Translated from $fromLang to $toLang: $sourceText"
-        translationResult.text = translatedText
-        Toast.makeText(requireContext(), "Translation in progress...", Toast.LENGTH_SHORT).show()
-        // Here you'd call your translation API (e.g., Google Translate API, custom backend)
-        // using Retrofit or similar, and update translationResult.text on success.
+        translationResult.text = "Translating..."
+        translateButton.isEnabled = false // Disable button during translation
+
+        // Use lifecycleScope for coroutines in fragments, which cancels when fragment is destroyed
+        lifecycleScope.launch {
+            try {
+                val request = TextTranslateRequest(sourceText, fromLangCode, toLangCode)
+                val response = RetrofitClient.apiService.translateText(request)
+
+                if (response.isSuccessful && response.body() != null) {
+                    translationResult.text = response.body()!!.translatedText
+                    Toast.makeText(requireContext(), "Translation successful!", Toast.LENGTH_SHORT).show()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val errorMessage = "Error: ${response.code()} - ${errorBody ?: response.message()}"
+                    translationResult.text = errorMessage
+                    Toast.makeText(requireContext(), "Translation failed: ${response.code()}", Toast.LENGTH_LONG).show()
+                    println("API Error: $errorBody") // Log error for debugging
+                }
+            } catch (e: Exception) {
+                translationResult.text = "Network error: ${e.message}"
+                Toast.makeText(requireContext(), "Network error: ${e.message}", Toast.LENGTH_LONG).show()
+                e.printStackTrace() // Print stack trace for debugging
+            } finally {
+                translateButton.isEnabled = true // Re-enable button
+            }
+        }
     }
 
     private fun downloadTranslation() {
         val translatedText = translationResult.text.toString()
-        if (translatedText.isEmpty() || translatedText == "Translation will appear here") {
-            Toast.makeText(requireContext(), "No translation to download", Toast.LENGTH_SHORT).show()
+        if (translatedText.isEmpty() || translatedText.contains("Translating...") || translatedText.contains("Error:")) {
+            Toast.makeText(requireContext(), "No valid translation to download", Toast.LENGTH_SHORT).show()
             return
         }
-        // Implement file download logic here (e.g., save to a text file in Downloads folder)
-        Toast.makeText(requireContext(), "Downloading translation...", Toast.LENGTH_SHORT).show()
+        // Basic placeholder for download. In a real app, you'd save to device storage.
+        Toast.makeText(requireContext(), "Downloading translation (simulated)...", Toast.LENGTH_SHORT).show()
+        // Example: You would implement file writing logic here
+        // val fileName = "translation_${System.currentTimeMillis()}.txt"
+        // val fileContent = translatedText
+        // File(context?.filesDir, fileName).writeText(fileContent)
+    }
+
+    // Helper function to map language names to codes expected by the backend
+    private fun getLanguageCode(languageName: String): String {
+        return when (languageName) {
+            "English" -> "en"
+            "Korean" -> "ko"
+            "Spanish" -> "es"
+            "French" -> "fr"
+            // Add more mappings as needed based on your languages_array and backend support
+            else -> "en" // Default to English if not found
+        }
     }
 }
