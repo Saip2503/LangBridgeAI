@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.langbridgai" // Your application ID
-        minSdk 24 // Or desired minimum SDK
+        minSdk 26 // UPDATED: Minimum SDK changed to 26 for adaptive icons compatibility
         targetSdk 34 // Or latest
         versionCode 1
         versionName "1.0"
@@ -46,12 +46,11 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     // Fragments KTX
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion" // For fragment transactions
-    // CardView for the login screen
-    implementation "androidx.cardview:cardview:$cardViewVersion"
+    // CardView for the login screen and image preview
+    implementation "androidx.cardview:cardview:$cardViewVersion" // Ensure this is present and correct
 
     // ML Kit Text Recognition
-    implementation "com.google.mlkit:text-recognition:$mlKitVisionCommonVersion"
-    implementation "com.google.mlkit:text-recognition-latin:$mlKitTextRecognitionLatinVersion" // For Latin script
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.0' // For Latin script
 
     // Retrofit for networking
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -67,11 +66,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     // Retrofit converter-scalars (explicitly added)
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
-    // Removed: implementation "com.squareup.retrofit2:retrofit-converters:$retrofitVersion" as it's not a direct library artifact
-
-    // Retrofit coroutines adapter (Note: This adapter is often not needed with Retrofit 2.6.0+ and suspend functions)
+    // Retrofit coroutines adapter
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofitKotlinCoroutinesAdapterVersion"
-
 
     // Testing
     testImplementation "junit:junit:$junitVersion"
