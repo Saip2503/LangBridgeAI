@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.LangbridgAI" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color for dark mode -->
+        <item name="colorPrimary">@color/soft_sky_blue</item>
+        <item name="colorPrimaryVariant">@color/deep_indigo</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color for dark mode -->
+        <item name="colorSecondary">@color/warm_pink</item>
+        <item name="colorSecondaryVariant">@color/warm_pink_darker</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/deep_indigo</item>
+
+        <!-- Background color for window in dark mode -->
+        <item name="android:windowBackground">#121212</item> <!-- Dark background -->
+        <item name="android:colorBackground">#121212</item>
+
+        <!-- Surface color for cards, sheets -->
+        <item name="colorSurface">#1F1F1F</item> <!-- Slightly lighter dark for surfaces -->
+        <item name="colorOnSurface">@color/white</item>
+
+        <!-- Text colors for dark mode -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">#CCCCCC</item>
+
+        <item name="colorError">@color/red_pink_destructive</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Inherit shape appearances -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.LangbridgAI.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.LangbridgAI.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.LangbridgAI.LargeComponent</item>
+    </style>
+</resources>

@@ -1,0 +1,40 @@
+
+buildscript {
+    ext {
+        // Define versions for common libraries or tools used across modules
+        // For example:
+        materialVersion = '1.12.0'
+        appCompatVersion = '1.6.1'
+        constraintLayoutVersion = '2.1.4'
+        coreKtxVersion = '1.13.1'
+        fragmentKtxVersion = '1.8.0'
+        cardViewVersion = '1.0.0'
+        mlKitVisionCommonVersion = '16.0.0'
+        mlKitTextRecognitionLatinVersion = '16.0.0'
+        retrofitVersion = '2.9.0'
+        gsonConverterVersion = '2.9.0'
+        okhttpVersion = '4.12.0'
+        okhttpLoggingInterceptorVersion = '4.12.0'
+        kotlinCoroutinesVersion = '1.7.1'
+        retrofitKotlinCoroutinesAdapterVersion = '0.9.2' // Note: Older adapter
+        junitVersion = '4.13.2'
+        extJunitVersion = '1.1.5'
+        espressoCoreVersion = '3.5.1'
+    }
+}
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '8.2.2' apply false // Or your current AGP version
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false // Or your current Kotlin version
+}
+
+//allprojects {
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}

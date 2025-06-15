@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.LangbridgAI" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/deep_indigo</item>
+        <item name="colorPrimaryVariant">@color/deep_indigo_darker</item> <!-- For status bar, etc. -->
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/warm_pink</item>
+        <item name="colorSecondaryVariant">@color/warm_pink_darker</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Accent color (often used with colorSecondary) -->
+        <item name="colorAccent">@color/soft_sky_blue</item> <!-- Used by older APIs -->
+
+        <!-- Background color for window -->
+        <item name="android:windowBackground">@color/background_white</item>
+        <item name="android:colorBackground">@color/background_white</item>
+
+        <!-- Surface color for cards, sheets -->
+        <item name="colorSurface">@color/card_surface_white_transparent</item>
+        <item name="colorOnSurface">@color/text_dark_contrast</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/text_deep_indigo</item>
+        <item name="android:textColorSecondary">@color/text_gentle_gray</item>
+        <!-- For error/destructive states -->
+        <item name="colorError">@color/red_pink_destructive</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Customize your theme here -->
+        <!-- Add rounded corners and soft shadows globally if desired or per-component -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.LangbridgAI.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.LangbridgAI.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.LangbridgAI.LargeComponent</item>
+    </style>
+
+    <!-- Shape Appearance for rounded corners -->
+    <style name="ShapeAppearance.LangbridgAI.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+    <style name="ShapeAppearance.LangbridgAI.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+    <style name="ShapeAppearance.LangbridgAI.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <!-- Optional: Styles for specific components that need custom colors -->
+    <style name="Widget.LangbridgAI.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/deep_indigo</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:stateListAnimator">@null</item> <!-- Remove default button elevation animation -->
+    </style>
+
+    <style name="Widget.LangbridgAI.Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/text_deep_indigo</item>
+        <item name="strokeColor">@color/border_light_indigo_tint</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+</resources>
