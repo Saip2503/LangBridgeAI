@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#FFFFFF" /> <!-- Clean white for input fields -->
-    <corners android:radius="12dp" /> <!-- Slightly larger radius for softer look -->
+    <solid android:color="#FFFFFF" />
+    <corners android:radius="12dp" />
     <stroke android:width="1.5dp" android:color="@color/border_light_indigo_tint" /> <!-- Light indigo border -->
 </shape>

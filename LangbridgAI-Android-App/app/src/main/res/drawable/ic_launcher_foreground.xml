@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Replace this path data with your actual app logo/design in SVG format -->
+    <!-- This is a placeholder for a simple shape -->
+    <path
+        android:fillColor="#3436E7"
+        android:pathData="M54,54m-30,0a30,30 0,1 1,60 0a30,30 0,1 1,-60 0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,54h20v2h-20z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M53,44v20h2v-20z" />
+</vector>

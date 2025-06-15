@@ -65,9 +65,11 @@ dependencies {
     // Kotlin Coroutines for asynchronous operations
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
-    // Retrofit coroutines adapter (Note: Older. For new projects, direct suspend functions are often enough)
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion" //This explicitly adds converter-scalars for the given Retrofit version
-    implementation "com.squareup.retrofit2:retrofit-converters:$retrofitVersion"
+    // Retrofit converter-scalars (explicitly added)
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
+    // Removed: implementation "com.squareup.retrofit2:retrofit-converters:$retrofitVersion" as it's not a direct library artifact
+
+    // Retrofit coroutines adapter (Note: This adapter is often not needed with Retrofit 2.6.0+ and suspend functions)
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofitKotlinCoroutinesAdapterVersion"
 
 

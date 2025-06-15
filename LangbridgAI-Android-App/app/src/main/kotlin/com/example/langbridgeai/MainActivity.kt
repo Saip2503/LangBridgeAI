@@ -2,6 +2,7 @@ package com.example.langbridgai
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button // Import Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -13,9 +14,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
-
-        # Ensure the `bottom_nav_tab_selector` drawable is available in `res/drawable`
-        # Ensure the `bottom_nav_item_color` selector is available in `res/color`
 
         // Set initial fragment
         if (savedInstanceState == null) {
@@ -41,12 +39,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // For the "Logout" button (if added to your main activity's layout)
-        // val logoutButton: Button = findViewById(R.id.logout_button)
-        // logoutButton.setOnClickListener {
-        //     val intent = Intent(this, LoginActivity::class.java) // Assuming LoginActivity
-        //     startActivity(intent)
-        //     finish() // Close MainActivity
-        // }
+        val logoutButton: Button = findViewById(R.id.logoutButton) // Correct ID from activity_main.xml
+        logoutButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java) // Assuming LoginActivity is your login screen
+            startActivity(intent)
+            finish() // Close MainActivity
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {

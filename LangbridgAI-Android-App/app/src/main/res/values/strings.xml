@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">LangbridgAI</string>
+    <string name="logout">Logout</string>
+    <string name="langbridgai">LangbridgAI</string>
+    <string name="email">Email</string>
+    <string name="demo_demo_demo_com_demo">Demo : demo@demo.com / demo</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="login_to_langbridgai">Login to LangbridgAI</string>
+    <string name="from">From</string>
+    <string name="download_translation">Download Translation</string>
+    <string name="translate">Translate</string>
+    <string name="translation_will_appear_here">Translation will appear here</string>
+    <string name="text">Text</string>
+    <string name="to">To</string>
+    <string name="enter_text_to_translate">Enter text to translate...</string>
+    <string name="translation">Translation</string>
     <!-- Add other string resources here as needed by your layouts or code -->
 </resources>

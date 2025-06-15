@@ -4,57 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_white" <!-- Main background -->
+    android:background="@color/background_white"
     tools:context=".MainActivity">
 
-    <!-- Top Header with Gradient -->
-    <LinearLayout
-        android:id="@+id/topHeader"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/gradient_main_background" <!-- Apply the gradient here -->
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LangbridgAI"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" /> <!-- White text on dark gradient -->
+<LinearLayout
+android:id="@+id/topHeader"
+android:layout_width="match_parent"
+android:layout_height="?attr/actionBarSize"
+android:background="@drawable/gradient_main_background"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
-        <!-- You can add a logout button here too -->
-        <!-- For example, a logout button with specific style -->
-        <!-- <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textColor="@color/red_pink_destructive"
-            android:background="?attr/selectableItemBackground"
-            android:layout_marginStart="auto" /> -->
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/langbridgai"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:ignore="TextContrastCheck" />
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <Button
+        android:id="@+id/logoutButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topHeader"
-        android:layout_above="@+id/bottom_navigation"/>
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/logout"
+        android:textColor="#212121" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white" <!-- White background for nav bar -->
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_item_color"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemRippleColor="@color/soft_sky_blue"
-        app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator" />
+</LinearLayout>
 
-</RelativeLayout>
+<FrameLayout
+android:id="@+id/fragment_container"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_below="@id/topHeader"
+android:layout_above="@+id/bottom_navigation"/>
+
+<com.google.android.material.bottomnavigation.BottomNavigationView
+android:id="@+id/bottom_navigation"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:background="@color/white"
+    app:itemIconTint="@color/bottom_nav_item_color"
+    app:itemTextColor="@color/bottom_nav_item_color"
+    app:menu="@menu/bottom_nav_menu"
+    app:itemRippleColor="@color/soft_sky_blue"
+    app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator" />
+
+    </RelativeLayout>

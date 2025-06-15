@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <!--
+    For more information about data extraction rules:
+    https://developer.android.com/about/versions/12/backup-restore#xml-changes
+    -->
+    <allow-backup>
+        <!-- TODO: Add rules here to allow/exclude specific files and databases -->
+        <!-- Example: Exclude a specific file from backup -->
+        <!-- <exclude domain="file" path="my_sensitive_data.txt"/> -->
+        <include domain="file" path="."/>
+        <include domain="database" path="."/>
+        <include domain="sharedpref" path="."/>
+    </allow-backup>
+</data-extraction-rules>

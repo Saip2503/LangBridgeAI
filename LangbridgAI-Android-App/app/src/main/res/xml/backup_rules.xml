@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!--
+    For more information about Android's auto backup rules:
+    https://developer.android.com/guide/topics/data/autobackup#ConfiguringAutoBackup
+    -->
+    <!-- TODO: Add rules here to allow/exclude specific files and databases -->
+    <!-- Example: Exclude shared preferences file from backup -->
+    <!-- <exclude domain="sharedpref" path="my_settings.xml"/> -->
+    <include domain="file" path="."/>
+    <include domain="database" path="."/>
+    <include domain="sharedpref" path="."/>
+</full-backup-content>
