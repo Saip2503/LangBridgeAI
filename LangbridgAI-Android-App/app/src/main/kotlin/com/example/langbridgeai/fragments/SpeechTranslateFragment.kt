@@ -1,4 +1,4 @@
-package com.example.langbridgai
+package com.example.langbridgai.fragments
 
 import android.Manifest
 import android.content.Intent
@@ -16,16 +16,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.langbridgai.R
+import com.example.langbridgai.SharedViewModel
 import com.example.langbridgai.network.RetrofitClient
 import com.example.langbridgai.network.TextTranslateRequest
 import kotlinx.coroutines.launch
-import java.util.Locale
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File // Used if you were to prepare an actual file for upload
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.util.Locale
 
 class SpeechTranslateFragment : Fragment() {
 
@@ -36,11 +39,16 @@ class SpeechTranslateFragment : Fragment() {
     private var speechRecognizer: SpeechRecognizer? = null
     private val RECORD_AUDIO_PERMISSION_CODE = 1
 
+    private lateinit var sharedViewModel: SharedViewModel // Declare SharedViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_speech_translate, container, false)
+
+        // Initialize SharedViewModel from the activity
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         micButton = view.findViewById(R.id.mic_button)
         transcriptionResult = view.findViewById(R.id.text_view_transcription_result)
@@ -80,10 +88,15 @@ class SpeechTranslateFragment : Fragment() {
                 if (!matches.isNullOrEmpty()) {
                     val transcribedText = matches[0]
                     transcriptionResult.text = transcribedText
-                    // Now, send this transcribed text for translation
-                    // NOTE: For this prototype, we send the transcribed text to the backend's text translation endpoint.
-                    // A full implementation would send actual audio to the /translate/speech endpoint.
-                    performTextTranslationFromSpeech(transcribedText)
+                    // Get languages from global ViewModel
+                    val fromLangCode = sharedViewModel.fromLanguageCode.value
+                    val toLangCode = sharedViewModel.toLanguageCode.value
+
+                    if (fromLangCode != null && toLangCode != null) {
+                        performTextTranslationFromSpeech(transcribedText, fromLangCode, toLangCode)
+                    } else {
+                        Toast.makeText(requireContext(), "Language selection is incomplete.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     transcriptionResult.text = "No speech detected."
                 }
@@ -109,8 +122,14 @@ class SpeechTranslateFragment : Fragment() {
             override fun afterTextChanged(s: android.text.Editable?) {
                 val text = s.toString().trim()
                 if (text.isNotEmpty()) {
-                    // Send typed text to the backend's text translation endpoint
-                    performTextTranslationFromSpeech(text)
+                    // Get languages from global ViewModel
+                    val fromLangCode = sharedViewModel.fromLanguageCode.value
+                    val toLangCode = sharedViewModel.toLanguageCode.value
+                    if (fromLangCode != null && toLangCode != null) {
+                        performTextTranslationFromSpeech(text, fromLangCode, toLangCode)
+                    } else {
+                        Toast.makeText(requireContext(), "Language selection is incomplete.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     speechTranslationResult.text = ""
                 }
@@ -148,7 +167,13 @@ class SpeechTranslateFragment : Fragment() {
     private fun startListening() {
         val speechIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()) // Or set a specific language
+            // Use the global 'from' language for recognition if it's not 'auto'
+            val fromLangForRecognition = if (sharedViewModel.fromLanguageCode.value == "auto") {
+                Locale.getDefault().language // Fallback to device locale for recognition
+            } else {
+                sharedViewModel.fromLanguageCode.value
+            }
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, fromLangForRecognition)
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1) // Get only the top result
         }
@@ -156,21 +181,25 @@ class SpeechTranslateFragment : Fragment() {
     }
 
     // This function sends transcribed text to the backend's TEXT translation endpoint
-    private fun performTextTranslationFromSpeech(transcribedText: String) {
+    private fun performTextTranslationFromSpeech(transcribedText: String, sourceLang: String?, targetLang: String) {
         if (transcribedText.isEmpty()) {
             speechTranslationResult.text = ""
             return
         }
 
+        // Prevent translation if source and target languages are the same AND not "auto"
+        if (sourceLang != "auto" && sourceLang == targetLang) {
+            speechTranslationResult.text = "Source and target languages cannot be the same for translation."
+            Toast.makeText(requireContext(), "Cannot translate to the same language.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         speechTranslationResult.text = "Translating speech..."
-        // In a real app, you might have specific 'from' and 'to' languages for speech
-        // For this prototype, we can use default or take from another spinner if available.
-        val fromLangCode = "en" // Assuming English transcription for now
-        val toLangCode = "en" // You might get this from a global setting or another spinner
 
         lifecycleScope.launch {
             try {
-                val request = TextTranslateRequest(transcribedText, fromLangCode, toLangCode)
+                val requestSourceLanguage: String? = if (sourceLang == "auto") null else sourceLang
+                val request = TextTranslateRequest(transcribedText, requestSourceLanguage, targetLang)
                 val response = RetrofitClient.apiService.translateText(request)
 
                 if (response.isSuccessful && response.body() != null) {
@@ -190,7 +219,7 @@ class SpeechTranslateFragment : Fragment() {
     // This is an EXAMPLE of how you would prepare for ACTUAL audio file upload
     // if you were sending to the /translate/speech endpoint that expects a file.
     // This requires actual audio recording/file handling, which is out of scope for this quick example.
-    private fun uploadAudioFile(audioFilePath: String, fromLang: String, toLang: String) {
+    private fun uploadAudioFile(audioFilePath: String, sourceLang: String, targetLang: String) {
         val audioFile = File(audioFilePath)
         if (!audioFile.exists()) {
             Toast.makeText(requireContext(), "Audio file not found!", Toast.LENGTH_SHORT).show()
@@ -200,12 +229,12 @@ class SpeechTranslateFragment : Fragment() {
         val requestBody = audioFile.asRequestBody("audio/wav".toMediaTypeOrNull()) // Adjust MIME type
         val audioPart = MultipartBody.Part.createFormData("audio_file", audioFile.name, requestBody)
 
-        val fromLangBody = fromLang.toRequestBody("text/plain".toMediaTypeOrNull())
-        val toLangBody = toLang.toRequestBody("text/plain".toMediaTypeOrNull())
+        val sourceLangBody = sourceLang.toRequestBody("text/plain".toMediaTypeOrNull())
+        val targetLangBody = targetLang.toRequestBody("text/plain".toMediaTypeOrNull())
 
         lifecycleScope.launch {
             try {
-                // val response = RetrofitClient.apiService.translateSpeech(audioPart, fromLangBody, toLangBody)
+                // val response = RetrofitClient.apiService.translateSpeech(audioPart, sourceLangBody, targetLangBody)
                 // Handle response...
             } catch (e: Exception) {
                 // Handle error...
@@ -217,7 +246,7 @@ class SpeechTranslateFragment : Fragment() {
     private fun downloadSpeechTranslation() {
         val transcription = transcriptionResult.text.toString()
         val translatedText = speechTranslationResult.text.toString()
-        if (translatedText.isEmpty() || translatedText.contains("Translating...") || translatedText.contains("Error:")) {
+        if (transcription.isEmpty() || translatedText.isEmpty() || translatedText.contains("Translating...") || translatedText.contains("Error:")) {
             Toast.makeText(requireContext(), "No valid speech translation to download", Toast.LENGTH_SHORT).show()
             return
         }
@@ -229,4 +258,6 @@ class SpeechTranslateFragment : Fragment() {
         super.onDestroyView()
         speechRecognizer?.destroy() // Release resources
     }
+
+    // Removed getLanguageCode helper function as it is now in MainActivity
 }

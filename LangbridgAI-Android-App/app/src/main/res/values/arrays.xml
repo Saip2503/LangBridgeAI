@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="languages_array">
+    <string-array name="languages_array" color="@color/text_deep_indigo" >
+        <item>Auto Detect</item> <!-- Added for potential future auto-detection feature -->
         <item>English</item>
         <item>Korean</item>
         <item>Spanish</item>
-        <!-- Add more languages as needed -->
+        <item>French</item>
+        <item>German</item>
+        <item>Chinese (Simplified)</item>
+        <item>Japanese</item>
+        <item>Arabic</item>
+        <item>Russian</item>
+        <item>Portuguese</item>
+        <item>Italian</item>
+        <item>Dutch</item>
+        <item>Swedish</item>
+        <item>Norwegian</item>
+        <item>Danish</item>
+        <item>Finnish</item>
+        <item>Greek</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Indonesian</item>
+        <item>Malay</item>
+        <item>Thai</item>
+        <item>Turkish</item>
+        <item>Vietnamese</item>
+        <item>Polish</item>
+        <item>Ukrainian</item>
+        <item>Romanian</item>
+        <item>Hungarian</item>
+        <item>Czech</item>
+        <item>Slovak</item>
+        <item>Bulgarian</item>
+        <item>Croatian</item>
+        <item>Serbian</item>
+        <item>Slovenian</item>
+        <item>Estonian</item>
+        <item>Latvian</item>
+        <item>Lithuanian</item>
+        <item>Filipino</item>
+        <item>Urdu</item>
+        <item>Bengali</item>
+        <item>Gujarati</item>
+        <item>Kannada</item>
+        <item>Malayalam</item>
+        <item>Marathi</item>
+        <item>Nepali</item>
+        <item>Punjabi</item>
+        <item>Sinhala</item>
+        <item>Tamil</item>
+        <item>Telugu</item>
     </string-array>
 </resources>

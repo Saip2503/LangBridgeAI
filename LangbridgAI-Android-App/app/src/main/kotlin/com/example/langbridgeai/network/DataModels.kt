@@ -6,14 +6,14 @@ import com.google.gson.annotations.SerializedName
 
 data class TextTranslateRequest(
     val text: String,
-    @SerializedName("from_lang") val fromLang: String,
-    @SerializedName("to_lang") val toLang: String
+    @SerializedName("source_language") val sourceLanguage: String?, // Use Optional for source_language, align with backend
+    @SerializedName("target_language") val targetLanguage: String // Align field name with backend
 )
 
 // --- Response Models (for receiving data from backend) ---
 
 data class TextTranslateResponse(
-    @SerializedName("translated_text") val translatedText: String
+    @SerializedName("translatedText") val translatedText: String // Assuming backend returns 'translatedText' as it did before
 )
 
 // For speech translation, the backend returns transcribed_text and translated_text

@@ -1,4 +1,4 @@
-package com.example.langbridgai
+package com.example.langbridgai.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,23 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope // For coroutines scope in fragments
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.langbridgai.R
+import com.example.langbridgai.SharedViewModel
 import com.example.langbridgai.network.RetrofitClient
 import com.example.langbridgai.network.TextTranslateRequest
 import kotlinx.coroutines.launch
 
 class TextTranslateFragment : Fragment() {
 
-    private lateinit var fromLanguageSpinner: Spinner
-    private lateinit var toLanguageSpinner: Spinner
     private lateinit var inputText: EditText
     private lateinit var translateButton: Button
     private lateinit var translationResult: TextView
     private lateinit var downloadButton: Button
+
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +32,8 @@ class TextTranslateFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_text_translate, container, false)
 
-        fromLanguageSpinner = view.findViewById(R.id.spinner_from_language)
-        toLanguageSpinner = view.findViewById(R.id.spinner_to_language)
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+
         inputText = view.findViewById(R.id.edit_text_input)
         translateButton = view.findViewById(R.id.button_translate)
         translationResult = view.findViewById(R.id.text_view_translation_result)
@@ -50,21 +52,34 @@ class TextTranslateFragment : Fragment() {
 
     private fun performTextTranslation() {
         val sourceText = inputText.text.toString().trim()
-        val fromLangCode = getLanguageCode(fromLanguageSpinner.selectedItem.toString())
-        val toLangCode = getLanguageCode(toLanguageSpinner.selectedItem.toString())
+        val fromLangCode = sharedViewModel.fromLanguageCode.value
+        val toLangCode = sharedViewModel.toLanguageCode.value
 
         if (sourceText.isEmpty()) {
             Toast.makeText(requireContext(), "Please enter text to translate", Toast.LENGTH_SHORT).show()
             return
         }
 
-        translationResult.text = "Translating..."
-        translateButton.isEnabled = false // Disable button during translation
+        if (fromLangCode == null || toLangCode == null) {
+            Toast.makeText(requireContext(), "Language selection is incomplete.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        // Use lifecycleScope for coroutines in fragments, which cancels when fragment is destroyed
+        // Prevent translation if source and target languages are the same AND not "auto"
+        if (fromLangCode != "auto" && fromLangCode == toLangCode) {
+            translationResult.text = "Source and target languages cannot be the same for translation."
+            Toast.makeText(requireContext(), "Cannot translate to the same language.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        translationResult.text = "Translating..."
+        translateButton.isEnabled = false
+
         lifecycleScope.launch {
             try {
-                val request = TextTranslateRequest(sourceText, fromLangCode, toLangCode)
+                val requestSourceLanguage: String? = if (fromLangCode == "auto") null else fromLangCode
+                val request = TextTranslateRequest(sourceText, requestSourceLanguage, toLangCode)
+
                 val response = RetrofitClient.apiService.translateText(request)
 
                 if (response.isSuccessful && response.body() != null) {
@@ -75,14 +90,14 @@ class TextTranslateFragment : Fragment() {
                     val errorMessage = "Error: ${response.code()} - ${errorBody ?: response.message()}"
                     translationResult.text = errorMessage
                     Toast.makeText(requireContext(), "Translation failed: ${response.code()}", Toast.LENGTH_LONG).show()
-                    println("API Error: $errorBody") // Log error for debugging
+                    println("API Error: $errorBody")
                 }
             } catch (e: Exception) {
                 translationResult.text = "Network error: ${e.message}"
                 Toast.makeText(requireContext(), "Network error: ${e.message}", Toast.LENGTH_LONG).show()
-                e.printStackTrace() // Print stack trace for debugging
+                e.printStackTrace()
             } finally {
-                translateButton.isEnabled = true // Re-enable button
+                translateButton.isEnabled = true
             }
         }
     }
@@ -93,23 +108,6 @@ class TextTranslateFragment : Fragment() {
             Toast.makeText(requireContext(), "No valid translation to download", Toast.LENGTH_SHORT).show()
             return
         }
-        // Basic placeholder for download. In a real app, you'd save to device storage.
         Toast.makeText(requireContext(), "Downloading translation (simulated)...", Toast.LENGTH_SHORT).show()
-        // Example: You would implement file writing logic here
-        // val fileName = "translation_${System.currentTimeMillis()}.txt"
-        // val fileContent = translatedText
-        // File(context?.filesDir, fileName).writeText(fileContent)
-    }
-
-    // Helper function to map language names to codes expected by the backend
-    private fun getLanguageCode(languageName: String): String {
-        return when (languageName) {
-            "English" -> "en"
-            "Korean" -> "ko"
-            "Spanish" -> "es"
-            "French" -> "fr"
-            // Add more mappings as needed based on your languages_array and backend support
-            else -> "en" // Default to English if not found
-        }
     }
 }

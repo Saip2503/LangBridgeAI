@@ -1,4 +1,4 @@
-package com.example.langbridgai
+package com.example.langbridgai.fragments
 
 import android.Manifest
 import android.app.Activity
@@ -15,23 +15,25 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.langbridgai.R
+import com.example.langbridgai.SharedViewModel
+import com.example.langbridgai.network.RetrofitClient
+import com.example.langbridgai.network.TextTranslateRequest
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import com.example.langbridgai.network.RetrofitClient
-import com.example.langbridgai.network.TextTranslateRequest
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File // Used if you were to prepare an actual file for upload
-import java.io.FileOutputStream
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class ImageTranslateFragment : Fragment() {
 
@@ -48,12 +50,15 @@ class ImageTranslateFragment : Fragment() {
 
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_image_translate, container, false)
+
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         uploadImageButton = view.findViewById(R.id.button_upload_image)
         liveCameraButton = view.findViewById(R.id.button_live_camera)
@@ -74,15 +79,19 @@ class ImageTranslateFragment : Fragment() {
             downloadImageTranslation()
         }
 
-        // Auto-translate as user types (for prototyping the text flow)
         extractedTextView.addTextChangedListener(object : android.text.TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: android.text.Editable?) {
                 val text = s.toString().trim()
                 if (text.isNotEmpty()) {
-                    // Send typed text to the backend's text translation endpoint
-                    performTextTranslationFromImage(text)
+                    val fromLangCode = sharedViewModel.fromLanguageCode.value
+                    val toLangCode = sharedViewModel.toLanguageCode.value
+                    if (fromLangCode != null && toLangCode != null) {
+                        performTextTranslationFromImage(text, fromLangCode, toLangCode)
+                    } else {
+                        Toast.makeText(requireContext(), "Language selection is incomplete.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     imageTranslationResult.text = ""
                 }
@@ -146,15 +155,8 @@ class ImageTranslateFragment : Fragment() {
                     val imageBitmap = data?.extras?.get("data") as? Bitmap
                     imageBitmap?.let {
                         imagePreview.setImageBitmap(it)
-                        // For ML Kit, you can use Bitmap directly:
                         val image = InputImage.fromBitmap(it, 0)
                         recognizeTextFromImage(image)
-
-                        // If you were to upload the bitmap as a file to backend:
-                        // val file = bitmapToFile(it, "temp_image.png")
-                        // if (file != null) {
-                        //     uploadImageFile(file, "en", "en") // Example langs
-                        // }
                     }
                 }
             }
@@ -179,9 +181,13 @@ class ImageTranslateFragment : Fragment() {
                 val extractedText = visionText.text
                 extractedTextView.text = extractedText
                 if (extractedText.isNotEmpty()) {
-                    // NOTE: For this prototype, we send the extracted text to the backend's text translation endpoint.
-                    // A full implementation would send actual image to the /translate/image endpoint.
-                    performTextTranslationFromImage(extractedText)
+                    val fromLangCode = sharedViewModel.fromLanguageCode.value
+                    val toLangCode = sharedViewModel.toLanguageCode.value
+                    if (fromLangCode != null && toLangCode != null) {
+                        performTextTranslationFromImage(extractedText, fromLangCode, toLangCode)
+                    } else {
+                        Toast.makeText(requireContext(), "Language selection is incomplete.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     imageTranslationResult.text = "No text found in image."
                 }
@@ -193,20 +199,25 @@ class ImageTranslateFragment : Fragment() {
             }
     }
 
-    // This function sends extracted text to the backend's TEXT translation endpoint
-    private fun performTextTranslationFromImage(extractedText: String) {
+    private fun performTextTranslationFromImage(extractedText: String, sourceLang: String?, targetLang: String) {
         if (extractedText.isEmpty()) {
             imageTranslationResult.text = ""
             return
         }
+
+        // Prevent translation if source and target languages are the same AND not "auto"
+        if (sourceLang != "auto" && sourceLang == targetLang) {
+            imageTranslationResult.text = "Source and target languages cannot be the same for translation."
+            Toast.makeText(requireContext(), "Cannot translate to the same language.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         imageTranslationResult.text = "Translating image text..."
-        // Assume default from English to English for now or get from a spinner
-        val fromLangCode = "en"
-        val toLangCode = "en"
 
         lifecycleScope.launch {
             try {
-                val request = TextTranslateRequest(extractedText, fromLangCode, toLangCode)
+                val requestSourceLanguage: String? = if (sourceLang == "auto") null else sourceLang
+                val request = TextTranslateRequest(extractedText, requestSourceLanguage, targetLang)
                 val response = RetrofitClient.apiService.translateText(request)
 
                 if (response.isSuccessful && response.body() != null) {
@@ -223,23 +234,21 @@ class ImageTranslateFragment : Fragment() {
         }
     }
 
-    // This is an EXAMPLE of how you would prepare for ACTUAL image file upload
-    // if you were sending to the /translate/image endpoint that expects a file.
-    private fun uploadImageFile(imageFile: File, fromLang: String, toLang: String) {
+    private fun uploadImageFile(imageFile: File, sourceLang: String, targetLang: String) {
         if (!imageFile.exists()) {
             Toast.makeText(requireContext(), "Image file not found!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val requestBody = imageFile.asRequestBody("image/png".toMediaTypeOrNull()) // Adjust MIME type
+        val requestBody = imageFile.asRequestBody("image/png".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData("image_file", imageFile.name, requestBody)
 
-        val fromLangBody = fromLang.toRequestBody("text/plain".toMediaTypeOrNull())
-        val toLangBody = toLang.toRequestBody("text/plain".toMediaTypeOrNull())
+        val sourceLangBody = sourceLang.toRequestBody("text/plain".toMediaTypeOrNull())
+        val targetLangBody = targetLang.toRequestBody("text/plain".toMediaTypeOrNull())
 
         lifecycleScope.launch {
             try {
-                // val response = RetrofitClient.apiService.translateImage(imagePart, fromLangBody, toLangBody)
+                // val response = RetrofitClient.apiService.translateImage(imagePart, sourceLangBody, targetLangBody)
                 // Handle response...
             } catch (e: Exception) {
                 // Handle error...
@@ -247,14 +256,12 @@ class ImageTranslateFragment : Fragment() {
         }
     }
 
-    // Helper to convert Bitmap to File (requires WRITE_EXTERNAL_STORAGE or Scoped Storage)
     private fun bitmapToFile(bitmap: Bitmap, fileName: String): File? {
-        // Create a file in cache directory
         val file = File(requireContext().cacheDir, fileName)
         return try {
             file.createNewFile()
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos) // or JPEG
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
             val bitmapdata = bos.toByteArray()
 
             val fos = FileOutputStream(file)
@@ -271,11 +278,10 @@ class ImageTranslateFragment : Fragment() {
     private fun downloadImageTranslation() {
         val extracted = extractedTextView.text.toString()
         val translation = imageTranslationResult.text.toString()
-        if (translation.isEmpty() || translation.contains("Translating...") || translation.contains("Error:")) {
+        if (extracted.isEmpty() || translation.isEmpty() || translation.contains("Translating...") || translation.contains("Error:")) {
             Toast.makeText(requireContext(), "No valid image translation to download", Toast.LENGTH_SHORT).show()
             return
         }
-        // Implement file download logic here
         Toast.makeText(requireContext(), "Downloading image translation (simulated)...", Toast.LENGTH_SHORT).show()
     }
 }
