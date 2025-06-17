@@ -3,13 +3,17 @@
     <item
         android:id="@+id/nav_text_translate"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Text Translate" />
+        android:title="@string/text_translate" />
     <item
         android:id="@+id/nav_speech_translate"
         android:icon="@android:drawable/ic_btn_speak_now"
-        android:title="Speech Translate" />
+        android:title="@string/speech_translate" />
     <item
         android:id="@+id/nav_image_translate"
         android:icon="@android:drawable/ic_menu_camera"
-        android:title="Image Translate" />
+        android:title="@string/image_translate" />
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/account" />
 </menu>

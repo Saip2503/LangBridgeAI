@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.langbridgai.R
-import com.example.langbridgai.SharedViewModel
+import com.example.langbridgeai.SharedViewModel
 import com.example.langbridgai.network.RetrofitClient
 import com.example.langbridgai.network.TextTranslateRequest
 import kotlinx.coroutines.launch

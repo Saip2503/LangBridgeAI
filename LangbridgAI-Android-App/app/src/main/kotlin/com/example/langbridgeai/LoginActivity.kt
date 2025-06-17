@@ -6,28 +6,31 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider // Import ViewModelProvider
+import com.example.langbridgeai.SharedViewModel
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var editTextEmail: EditText
     private lateinit var editTextPassword: EditText
     private lateinit var buttonLogin: Button
+    private lateinit var sharedViewModel: SharedViewModel // Declare SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login) // Set the content view to your login layout
+        setContentView(R.layout.activity_login)
 
-        // Initialize UI elements
+        // Initialize SharedViewModel
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
         editTextEmail = findViewById(R.id.editTextEmail)
         editTextPassword = findViewById(R.id.editTextPassword)
         buttonLogin = findViewById(R.id.buttonLogin)
 
-        // Set up the login button click listener
         buttonLogin.setOnClickListener {
             performLogin()
         }
 
-        // Optional: Pre-fill demo credentials for quick testing (as shown in your image)
         editTextEmail.setText("demo@demo.com")
         editTextPassword.setText("demo")
     }
@@ -50,17 +53,14 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        // --- AUTHENTICATION LOGIC GOES HERE ---
-        // For a real application, you would integrate with Firebase Authentication
-        // or your custom backend API here.
-
-        // Example Placeholder Authentication (DO NOT USE IN PRODUCTION)
         if (email == "demo@demo.com" && password == "demo") {
             Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-            // Navigate to the main activity or dashboard after successful login
+            // Set the username in the SharedViewModel after successful login
+            sharedViewModel.setUserName(email)
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // Close LoginActivity so user can't go back with back button
+            finish()
         } else {
             Toast.makeText(this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show()
         }

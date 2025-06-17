@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_white"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Translation History"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_deep_indigo"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <!-- For displaying history, a RecyclerView is ideal for lists.
+         For simplicity in this initial implementation, we'll use a TextView.
+         You can later replace this with a RecyclerView and custom Adapter. -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/text_view_history_display"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No translation history yet."
+            android:textSize="16sp"
+            android:textColor="@color/text_dark_contrast"
+            android:padding="8dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:gravity="top|start"
+            android:minHeight="200dp"/>
+    </ScrollView>
+
+    <!-- If using RecyclerView, it would look something like this: -->
+    <!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_history"
+        android:layout_width="match_content"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_translation_history"/>
+    -->
+
+</LinearLayout>

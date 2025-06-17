@@ -17,28 +17,29 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider // For ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.example.langbridgai.R
-import com.example.langbridgai.SharedViewModel
-import com.example.langbridgai.network.RetrofitClient
-import com.example.langbridgai.network.TextTranslateRequest
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import com.example.langbridgai.network.RetrofitClient
+import com.example.langbridgai.network.TextTranslateRequest
+import com.example.langbridgeai.SharedViewModel // Import SharedViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.ByteArrayOutputStream
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
+import java.io.ByteArrayOutputStream
 
 class ImageTranslateFragment : Fragment() {
 
     private lateinit var uploadImageButton: Button
     private lateinit var liveCameraButton: Button
+    // Removed fromLanguageSpinner and toLanguageSpinner as they are now global in MainActivity
     private lateinit var imagePreview: ImageView
     private lateinit var extractedTextView: TextView
     private lateinit var imageTranslationResult: TextView
@@ -50,7 +51,7 @@ class ImageTranslateFragment : Fragment() {
 
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel // Declare SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,10 +59,13 @@ class ImageTranslateFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_image_translate, container, false)
 
+        // Initialize SharedViewModel
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         uploadImageButton = view.findViewById(R.id.button_upload_image)
         liveCameraButton = view.findViewById(R.id.button_live_camera)
+        // REMOVED: fromLanguageSpinner = view.findViewById(R.id.spinner_image_from_language)
+        // REMOVED: toLanguageSpinner = view.findViewById(R.id.spinner_image_to_language)
         imagePreview = view.findViewById(R.id.image_preview)
         extractedTextView = view.findViewById(R.id.text_view_extracted_text)
         imageTranslationResult = view.findViewById(R.id.text_view_image_translation_result)
@@ -79,6 +83,7 @@ class ImageTranslateFragment : Fragment() {
             downloadImageTranslation()
         }
 
+        // Auto-translate as user types (for prototyping the text flow)
         extractedTextView.addTextChangedListener(object : android.text.TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -204,14 +209,6 @@ class ImageTranslateFragment : Fragment() {
             imageTranslationResult.text = ""
             return
         }
-
-        // Prevent translation if source and target languages are the same AND not "auto"
-        if (sourceLang != "auto" && sourceLang == targetLang) {
-            imageTranslationResult.text = "Source and target languages cannot be the same for translation."
-            Toast.makeText(requireContext(), "Cannot translate to the same language.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         imageTranslationResult.text = "Translating image text..."
 
         lifecycleScope.launch {
@@ -284,4 +281,6 @@ class ImageTranslateFragment : Fragment() {
         }
         Toast.makeText(requireContext(), "Downloading image translation (simulated)...", Toast.LENGTH_SHORT).show()
     }
+
+    // Removed getLanguageCode helper function as it is now in MainActivity
 }
