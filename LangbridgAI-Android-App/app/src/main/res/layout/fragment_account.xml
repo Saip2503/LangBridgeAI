@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/background_white">
+    android:background="@color/soft_sky_blue">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:id="@+id/text_view_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username: Not Logged In"
+            android:hint="Username: Loading..."
             android:textSize="18sp"
             android:textColor="@color/text_dark_contrast"
             android:layout_marginBottom="16dp"
@@ -47,7 +47,7 @@
             android:id="@+id/text_view_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email: N/A"
+            android:hint="Email: Loading..."
             android:textSize="16sp"
             android:textColor="@color/text_gentle_gray"
             android:layout_marginBottom="32dp"/>

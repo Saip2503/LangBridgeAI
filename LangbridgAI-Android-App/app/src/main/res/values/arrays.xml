@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="languages_array" format="string" >
+    <string-array name="languages_array" format="string"  >
         <item>Auto Detect</item> <!-- Added for potential future auto-detection feature -->
         <item>English</item>
         <item>Korean</item>

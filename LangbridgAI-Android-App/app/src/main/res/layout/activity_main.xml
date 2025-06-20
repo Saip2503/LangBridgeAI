@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_white"
+    android:background="@color/soft_sky_blue"
     tools:context=".MainActivity">
 
     <!-- Global Language Selection Spinners -->
@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From"
+                android:text="@string/from"
                 android:textSize="14sp"
                 android:textColor="@color/text_deep_indigo"
                 android:layout_marginBottom="4dp"/>
@@ -41,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/languages_array"
                 android:minHeight="48dp"
+                android:textColor="@android:color/black"
                 android:background="@drawable/rounded_edittext_background"
                 android:padding="8dp"/>
         </LinearLayout>
@@ -55,7 +56,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To"
+                android:text="@string/to"
                 android:textSize="14sp"
                 android:textColor="@color/text_deep_indigo"
                 android:layout_marginBottom="4dp"/>
@@ -66,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/languages_array"
                 android:minHeight="48dp"
+                android:textColor="@android:color/black"
                 android:background="@drawable/rounded_edittext_background"
                 android:padding="8dp"/>
         </LinearLayout>
@@ -89,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:background="@color/white"
+        android:background="@color/background_white"
         app:itemIconTint="@color/bottom_nav_item_color"
         app:itemTextColor="@color/bottom_nav_item_color"
         app:menu="@menu/bottom_nav_menu"
@@ -97,6 +99,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
-        tools:ignore="VisualLintBottomNav" />
+        app:labelVisibilityMode="unlabeled" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

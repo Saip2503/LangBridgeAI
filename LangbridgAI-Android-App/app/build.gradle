@@ -68,7 +68,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
     // Retrofit coroutines adapter
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofitKotlinCoroutinesAdapterVersion"
-
+    // Google Sign-In ADDED
+    implementation 'com.google.android.gms:play-services-auth:21.0.0'
     // Testing
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"

@@ -26,4 +26,5 @@
     <!-- Standard Android colors (if you use them, you might want to adjust) -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background2">#E400BCD4</color>
 </resources>
